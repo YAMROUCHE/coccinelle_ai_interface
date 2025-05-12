@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coccinelle AI – Call Center</title>
+<style>
+ body{font-family:Arial,sans-serif;margin:40px;max-width:600px}
+ #chat{min-height:300px;border:1px solid #ddd;padding:1rem;border-radius:8px;overflow-y:auto}
+ .msg{padding:.6em 1em;border-radius:8px;margin:.4em 0;max-width:80%}
+ .user{background:#d1e7ff;margin-left:auto}
+ .bot{background:#f4f4f4;border:1px solid #ccc}
+ form{display:flex;margin-top:1rem;gap:.5rem}
+ input{flex:1;padding:.6em;font-size:1rem}
+ button{padding:.6em 1.2em;font-size:1rem;background:#2a64ff;color:#fff;border:none;border-radius:6px;cursor:pointer}
+ .suggestions{margin-top:1rem;display:flex;flex-wrap:wrap;gap:.5rem}
+ .suggestion{background:#eee;padding:.4em .8em;border-radius:20px;cursor:pointer;font-size:.9rem}
+</style>
+</head>
+<body>
+ <h1>Assistant Immobilier IA</h1>
+
+ <div id="chat">
+  <div class="msg bot">Bonjour ! Comment puis-je vous aider ?</div>
+ </div>
+
+ <form id="form">
+   <input id="input" placeholder="Votre question…" required>
+   <button>Envoyer</button>
+ </form>
+
+ <div class="suggestions">
+   <span class="suggestion" onclick="preset('Ce logement est-il disponible ?')">Ce logement est-il disponible ?</span>
+   <span class="suggestion" onclick="preset('Quel est le loyer mensuel ?')">Quel est le loyer mensuel ?</span>
+   <span class="suggestion" onclick="preset('Y a-t-il un balcon ?')">Y a-t-il un balcon ?</span>
+ </div>
+
+<script>
+const chat=document.getElementById('chat');
+const form=document.getElementById('form');
+const input=document.getElementById('input');
+
+form.addEventListener('submit',async e=>{
+ e.preventDefault();
+ const q=input.value.trim();
+ if(!q)return;
+ addMsg(q,'user');
+ input.value='';
+ const r=await fetch('/ask',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q})});
+ const data=await r.json();
+ addMsg(data.answer,'bot');
+});
+
+function addMsg(text,cls){
+ const div=document.createElement('div');
+ div.className='msg '+cls;
+ div.textContent=text;
+ chat.appendChild(div);
+ chat.scrollTop=chat.scrollHeight;
+}
+function preset(t){input.value=t;input.focus();}
+</script>
+</body>
+</html>
