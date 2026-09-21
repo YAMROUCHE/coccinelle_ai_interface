@@ -1,0 +1,23 @@
+# Secrets — jamais commités
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*.json
+client_secret*.json
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+env/
+*.egg-info/
+.pytest_cache/
+
+# Système / éditeur
+.DS_Store
+.idea/
+.vscode/
+*.log
